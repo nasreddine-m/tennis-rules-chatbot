@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Assistant Règlement Tennis (ITF)</title>
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<style>
+  :root {
+    --tennis-green: #1c5d3a;
+    --tennis-green-dark: #123d26;
+    --tennis-yellow: #d4f000;
+    --tennis-yellow-dark: #a8c000;
+    --ink: #1a1a1a;
+    --paper: #fafaf5;
+
+    --chat--color-primary: var(--tennis-green);
+    --chat--color-primary-shade-50: var(--tennis-green-dark);
+    --chat--color-primary-shade-100: var(--tennis-green-dark);
+    --chat--color-secondary: var(--tennis-yellow-dark);
+    --chat--color-secondary-shade-50: var(--tennis-yellow-dark);
+    --chat--color-white: #ffffff;
+    --chat--color-light: #f4f7f4;
+    --chat--color-light-shade-50: #e5ebe5;
+    --chat--color-light-shade-100: #d9e0d9;
+    --chat--color-medium: #dde3dd;
+    --chat--color-dark: var(--ink);
+    --chat--color-disabled: #9aa39a;
+    --chat--color-typing: #4d4d4d;
+
+    --chat--spacing: 1rem;
+    --chat--border-radius: 14px;
+    --chat--transition-duration: 0.15s;
+
+    --chat--window--width: 400px;
+    --chat--window--height: 620px;
+
+    --chat--header-height: auto;
+    --chat--header--padding: 1.1rem 1.3rem;
+    --chat--header--background: var(--tennis-green);
+    --chat--header--color: #ffffff;
+    --chat--heading--font-size: 1.25rem;
+    --chat--subtitle--font-size: 0.85rem;
+    --chat--subtitle--line-height: 1.4;
+
+    --chat--message--font-size: 0.95rem;
+    --chat--message--padding: 0.7rem 0.95rem;
+    --chat--message--border-radius: 12px;
+    --chat--message-line-height: 1.45;
+    --chat--message--bot--background: #ffffff;
+    --chat--message--bot--color: var(--ink);
+    --chat--message--bot--border: 1px solid #e3e8e3;
+    --chat--message--user--background: var(--tennis-green);
+    --chat--message--user--color: #ffffff;
+    --chat--message--user--border: none;
+
+    --chat--toggle--background: var(--tennis-green);
+    --chat--toggle--hover--background: var(--tennis-green-dark);
+    --chat--toggle--active--background: var(--tennis-green-dark);
+    --chat--toggle--color: #ffffff;
+    --chat--toggle--size: 62px;
+
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--tennis-green) 0%, var(--tennis-green-dark) 100%);
+    color: #fff;
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(212,240,0,0.18) 0, transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(212,240,0,0.12) 0, transparent 40%);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; max-width: 720px; margin: 0 auto; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(212,240,0,0.15);
+    border: 1px solid rgba(212,240,0,0.4);
+    color: var(--tennis-yellow);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    margin-bottom: 1.1rem;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    margin: 0 0 0.7rem;
+    font-weight: 800;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.88);
+    margin: 0 auto;
+    max-width: 560px;
+  }
+
+  main {
+    max-width: 860px;
+    margin: -1.5rem auto 3rem;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+
+  .panel {
+    background: #fff;
+    border: 1px solid #e5e9e3;
+    border-radius: 18px;
+    box-shadow: 0 12px 32px rgba(20, 60, 40, 0.10);
+    padding: 1.5rem;
+  }
+
+  .panel h2 {
+    margin: 0 0 0.6rem;
+    font-size: 1.05rem;
+    color: var(--tennis-green-dark);
+  }
+
+  .examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.8rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .examples li {
+    background: var(--chat--color-light);
+    border: 1px solid var(--chat--color-light-shade-100);
+    color: var(--tennis-green-dark);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  #n8n-chat {
+    height: 620px;
+    margin-top: 1.5rem;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(20, 60, 40, 0.10);
+    border: 1px solid #e5e9e3;
+  }
+
+  footer {
+    text-align: center;
+    color: #6b7a6f;
+    font-size: 0.8rem;
+    padding: 0 1.5rem 2rem;
+  }
+
+  footer a { color: var(--tennis-green-dark); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-content">
+    <span class="badge">🎾 RAG · n8n · Supabase</span>
+    <h1>L'assistant du règlement de tennis (ITF)</h1>
+    <p>
+      Posez une question sur les règles du jeu, le score, les fautes ou l'équipement.
+      Les réponses sont tirées du règlement officiel et de guides ITF, sources à l'appui.
+    </p>
+  </div>
+</div>
+
+<main>
+  <div class="panel">
+    <h2>Quelques exemples de questions</h2>
+    <ul class="examples">
+      <li>Combien de temps dure l'échauffement ?</li>
+      <li>Que dit le Code sur les fautes de pied ?</li>
+      <li>Comment résoudre un désaccord sur le score ?</li>
+    </ul>
+  </div>
+
+  <div id="n8n-chat"></div>
+</main>
+
+<footer>
+  Assistant basé sur un pipeline RAG (n8n + Supabase + OpenAI). Les réponses hors règlement du tennis sont refusées.
+</footer>
+
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+  createChat({
+    webhookUrl: 'https://helena-forecast-never-reg.trycloudflare.com/webhook/rag-tennis-chat/chat',
+    target: '#n8n-chat',
+    mode: 'fullscreen',
+    showWelcomeScreen: true,
+    initialMessages: [
+      "🎾 Bonjour ! Je suis l'assistant du règlement officiel de tennis (ITF).",
+      "Pose-moi une question sur les règles du jeu, le score, les fautes ou l'équipement — je réponds en citant mes sources."
+    ],
+    i18n: {
+      en: {
+        title: "Assistant Règlement Tennis",
+        subtitle: "Basé sur le règlement officiel ITF — réponses sourcées.",
+        footer: '',
+        getStarted: 'Nouvelle conversation',
+        inputPlaceholder: 'Écris ta question sur le règlement...',
+        closeButtonTooltip: 'Fermer',
+      },
+    },
+  });
+</script>
+
+</body>
+</html>
